@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Zonk Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link rel="stylesheet" href="game.css">
+    <script src="https://unpkg.com/vue"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+      crossorigin="anonymous"></script>
+    </head>
+
+<body>
+    <div id="app">
+        <div class="ui dimmer" :class="{'active': !gameOn}"></div>
+        <div class="ui modal" :class="{'active': !gameOn}">
+            <div class="header">
+                Pick Teams
+            </div>
+            <div class="image content">
+                <form class="ui form">
+                    <div class="field">
+                        <label>Team One</label>
+                        <input type="text" name="first-name" placeholder="First Name" v-model="teamOneName">
+                    </div>
+                    <div class="field">
+                        <label>Team Two</label>
+                        <input type="text" name="last-name" placeholder="Last Name" v-model="teamTwoName">
+                    </div>
+                </form>
+            </div>
+            <div class="actions">
+                <div class="ui button" @click="gameOn = !gameOn">Start</div>
+            </div>
+        </div>
+        <div class="toolbar">
+            <button class="ui purple button" @click="reveal">Reveal</button>
+            <button class="ui red button" @click="generateCards">Shuffle</button>
+            <button class="ui black button" @click="restart">Restart Game</button>
+            <div class="ui violet huge label" style="cursor:pointer" @click="changeTeam('teamOnePoints')">
+              {{ teamOneName }}: {{teamOnePoints}}
+            </div>
+            <div class="ui green huge label" style="cursor:pointer" @click="changeTeam('teamTwoPoints')">
+              {{ teamTwoName }}: {{teamTwoPoints}}
+            </div>
+            <div class="ui blue huge label" v-if="currentTeam">
+                <span v-if="currentTeam === 'teamOnePoints'">  {{ teamOneName }} is playing || <span style="cursor: pointer" @click="endTurn">End Turn</span></span>
+                <span v-else>  {{ teamTwoName }} is playing || <span style="cursor: pointer" @click="endTurn">End Turn</span></span>
+            </div>
+            <div v-if="activeTeamPoints" class="ui olive huge label">
+                <span >Accumulated: {{ activeTeamPoints }}</span>
+                &nbsp;&nbsp;&nbsp;Next card worth  = X {{ pickNumber }}
+            </div>
+        </div>
+        <div class="toolbar-right">
+
+        </div>
+        <div class="ui grid">
+            <div class="six column row">
+                <div class="column" v-for="(card, index) in cards">
+                    <div class="flip-container">
+                        <div class="card" @click="flip(index)" :class="{'flipped': card.flipped}">
+                            <div class="front"><h1 class="card-number">{{index + 1}}</h1></div>
+                            <div class="back">
+                                <h1 class="value-number" v-if="card.value > 0">
+                                    <span v-if="card.flipped">
+                                        {{ card.value }}
+                                    </span>
+                                    <span v-else>
+                                        {{ card.value * pickNumber }}
+                                    </span>
+
+                                </h1>
+                                <h1 v-else>
+                                    <img src="img/zonk.png" alt="">
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="game.js"></script>
+</body>
+
+</html>
