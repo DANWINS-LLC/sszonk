@@ -32,6 +32,7 @@ var app = new Vue({
                 // ZONK!!!
                 var audio = new Audio('audio/evillaugh.mp3')
                 audio.play()
+                this.pickNumber = 0
                 if (this.risky) {
                     // Subtract points and end turn
                     this[this.currentTeam] -= this.activeTeamPoints
