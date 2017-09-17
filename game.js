@@ -15,7 +15,7 @@ var app = new Vue({
         cardPossibilities: [0, 0, 0, 0, 100, 200, 300, 400, 500]
     },
     methods: {
-        generateCards: function() {
+        generateCards: function () {
             this.changeTeam()
             this.cards = []
             for (var i = 0; i < _.range(24).length; i++) {
@@ -26,7 +26,7 @@ var app = new Vue({
                 })
             }
         },
-        flip: function(index) {
+        flip: function (index) {
             this.cards[index].flipped = !this.cards[index].flipped
             if (this.cards[index].value === 0) {
                 // ZONK!!!
@@ -57,7 +57,7 @@ var app = new Vue({
                 this.pickNumber += 1
             }
         },
-        reveal: function() {
+        reveal: function () {
             var vm = this
             vm.risky = true
             vm.cards.map(function(value) {
@@ -71,7 +71,13 @@ var app = new Vue({
                 }, Math.floor(Math.random() * 600) + 500)
             })
         },
-        restart: function() {
+        manualReveal: function () {
+            var vm = this
+            vm.cards.map(function(value) {
+                value.flipped = !value.flipped
+            })
+        },
+        restart: function () {
             this.teamOneName = ''
             this.teamOnePoints = 0
             this.teamTwoName = ''
@@ -81,7 +87,7 @@ var app = new Vue({
             this.risky = false
             this.pickNumber = 1
         },
-        endTurn: function() {
+        endTurn: function () {
             this[this.currentTeam] += this.activeTeamPoints
             this.activeTeamPoints = 0
             this.currentTeam = ''
@@ -89,7 +95,7 @@ var app = new Vue({
             this.pickNumber = 1
             this.generateCards()
         },
-        changeTeam: function(num) {
+        changeTeam: function (num) {
             this.currentTeam = num
             this.risky = false
             this.pickNumber = 1
@@ -99,19 +105,22 @@ var app = new Vue({
     mounted() {
         this.generateCards()
         var vm = this
-        Mousetrap.bind('e e', function() {
+        Mousetrap.bind('e e', function () {
             vm.endTurn()
         })
-        Mousetrap.bind('left', function() {
+        Mousetrap.bind('left', function () {
             vm.changeTeam('teamOnePoints')
         })
-        Mousetrap.bind('right', function() {
+        Mousetrap.bind('right', function () {
             vm.changeTeam('teamTwoPoints')
         })
-        Mousetrap.bind('r r', function() {
+        Mousetrap.bind('r r', function () {
             vm.reveal()
         })
-        Mousetrap.bind('s s', function() {
+        Mousetrap.bind('m r', function () {
+            vm.manualReveal()
+        })
+        Mousetrap.bind('s s', function () {
             vm.generateCards()
         })
     }
