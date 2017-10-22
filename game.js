@@ -16,7 +16,7 @@ var app = new Vue({
     },
     methods: {
         generateCards: function (notRisky) {
-            this.changeTeam()
+            this.changeTeam(this.currentTeam)
             this.cards = []
             for (var i = 0; i < _.range(24).length; i++) {
                 var multiplier = 4
@@ -62,12 +62,12 @@ var app = new Vue({
             vm.cards.map(function(value) {
                 _.delay(function() {
                     value.flipped = !value.flipped
-                }, Math.floor(Math.random() * 250) + 30)
+                }, Math.floor(Math.random() * 250) + 40)
             })
             vm.cards.map(function(value) {
                 _.delay(function() {
                     value.flipped = !value.flipped
-                }, Math.floor(Math.random() * 600) + 300)
+                }, Math.floor(Math.random() * 600) + 400)
             })
         },
         manualReveal: function () {
