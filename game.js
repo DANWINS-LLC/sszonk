@@ -9,20 +9,26 @@ var app = new Vue({
         teamTwoPoints: 0,
         gameOn: false,
         currentTeam: '',
-        risky: false,
+        risky: true,
         pickNumber: 1,
         activeTeamPoints: 0,
         cardPossibilities: [0, 0, 0, 0, 100, 200, 300, 400, 500]
     },
     methods: {
-        generateCards: function () {
+        generateCards: function (notRisky) {
             this.changeTeam()
             this.cards = []
             for (var i = 0; i < _.range(24).length; i++) {
+                var multiplier = 4
+                if (notRisky) {
+                    multiplier = 1
+                    this.risky = false
+                    console.log('not risky')
+                }
                 this.cards.push({
                     id: i,
                     flipped: false,
-                    value: this.cardPossibilities[Math.floor(Math.random() * this.cardPossibilities.length)]
+                    value: this.cardPossibilities[Math.floor(Math.random() * this.cardPossibilities.length)] * multiplier
                 })
             }
         },
@@ -33,14 +39,7 @@ var app = new Vue({
                 var audio = new Audio('audio/evillaugh.mp3')
                 audio.play()
                 this.pickNumber = 0
-                if (this.risky) {
-                    // Subtract points and end turn
-                    this[this.currentTeam] -= this.activeTeamPoints
-                    this.activeTeamPoints = 0
-                } else {
-                    // just end turn
-                    this.activeTeamPoints = 0
-                }
+                this.activeTeamPoints = 0
             } else {
                 // Card was worth points
                 this.activeTeamPoints += this.cards[index].value * this.pickNumber
@@ -59,16 +58,16 @@ var app = new Vue({
         },
         reveal: function () {
             var vm = this
-            vm.risky = true
+            vm.generateCards('notRisky')
             vm.cards.map(function(value) {
                 _.delay(function() {
                     value.flipped = !value.flipped
-                }, Math.floor(Math.random() * 250) + 50)
+                }, Math.floor(Math.random() * 250) + 30)
             })
             vm.cards.map(function(value) {
                 _.delay(function() {
                     value.flipped = !value.flipped
-                }, Math.floor(Math.random() * 600) + 500)
+                }, Math.floor(Math.random() * 600) + 300)
             })
         },
         manualReveal: function () {
@@ -84,20 +83,20 @@ var app = new Vue({
             this.teamTwoPoints = 0
             this.gameOn = false
             this.currentTeam = ''
-            this.risky = false
+            this.risky = true
             this.pickNumber = 1
         },
         endTurn: function () {
             this[this.currentTeam] += this.activeTeamPoints
             this.activeTeamPoints = 0
             this.currentTeam = ''
-            this.risky = false
+            this.risky = true
             this.pickNumber = 1
             this.generateCards()
         },
         changeTeam: function (num) {
             this.currentTeam = num
-            this.risky = false
+            this.risky = true
             this.pickNumber = 1
             this.activeTeamPoints = 0
         }
