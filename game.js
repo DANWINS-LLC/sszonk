@@ -64,12 +64,12 @@ var app = new Vue({
             vm.cards.map(function(value) {
                 _.delay(function() {
                     value.flipped = !value.flipped
-                }, Math.floor(Math.random() * 250) + 40)
+                }, Math.floor(Math.random() * 150) + 30)
             })
             vm.cards.map(function(value) {
                 _.delay(function() {
                     value.flipped = !value.flipped
-                }, Math.floor(Math.random() * 600) + 400)
+                }, Math.floor(Math.random() * 500) + 300)
             })
         },
         manualReveal: function () {
