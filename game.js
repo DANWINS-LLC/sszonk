@@ -20,15 +20,17 @@ var app = new Vue({
             this.cards = []
             for (var i = 0; i < _.range(24).length; i++) {
                 var multiplier = 4
+                var cardPossibilities = [0, 100, 200, 300, 400, 500, 500]
                 if (notRisky) {
                     multiplier = 1
                     this.risky = false
+                    cardPossibilities = [0, 0, 0, 0, 100, 200, 300, 400, 500]
                     console.log('not risky')
                 }
                 this.cards.push({
                     id: i,
                     flipped: false,
-                    value: this.cardPossibilities[Math.floor(Math.random() * this.cardPossibilities.length)] * multiplier
+                    value: cardPossibilities[Math.floor(Math.random() * cardPossibilities.length)] * multiplier
                 })
             }
         },
